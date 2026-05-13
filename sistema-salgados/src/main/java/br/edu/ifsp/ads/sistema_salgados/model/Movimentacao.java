@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Movimentacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private Long id;
 
     private String sabor;
     private Integer quantidade;

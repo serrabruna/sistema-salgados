@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
-public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long> {
+public interface MovimentacaoDao extends JpaRepository<Movimentacao, Long> {
     List<Movimentacao> findByCliente(Cliente cliente);
     List<Movimentacao> findByClienteId(Long clienteId);
 }
