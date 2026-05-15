@@ -1,11 +1,13 @@
 package br.edu.ifsp.ads.sistema_salgados.controller;
 
 import java.util.Map;
+import java.util.List;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +42,13 @@ public class PedidoController {
         comando.execute();
 
         return ResponseEntity.ok(mov);
+    }
+
+    @GetMapping("/historico/{clienteId}")
+    public ResponseEntity<List<Movimentacao>> listarHistorico(@PathVariable Long clienteId) {
+        // Agora o List<Movimentacao> será reconhecido como uma coleção genérica
+        List<Movimentacao> historico = movimentacaoDao.findByClienteId(clienteId);
+        return ResponseEntity.ok(historico);
     }
 
     @DeleteMapping("/estornar/{id}")
