@@ -5,26 +5,21 @@ import br.edu.ifsp.ads.sistema_salgados.model.Movimentacao;
 import br.edu.ifsp.ads.sistema_salgados.patterns.command.Command;
 import br.edu.ifsp.ads.sistema_salgados.patterns.command.PedidoCommand;
 import br.edu.ifsp.ads.sistema_salgados.patterns.factory.MovimentacaoFactory;
-import br.edu.ifsp.ads.sistema_salgados.patterns.strategy.PrecoVendaPadrao;
 import br.edu.ifsp.ads.sistema_salgados.repository.ClienteDao;
 import br.edu.ifsp.ads.sistema_salgados.repository.MovimentacaoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//Padrão Facade para simplificar a interface de processamento de pedidos
-@Service
+@Service 
 public class PedidoService {
+
     @Autowired
     private MovimentacaoDao movimentacaoDao;
 
     @Autowired
-    private ClienteDao clienteDao;
-
-    @Autowired
-    private PrecoVendaPadrao precoVendaPadrao; 
-
+    private ClienteDao clienteDao; 
     public Movimentacao processarPedido(String sabor, Integer quantidade, Cliente cliente) {
-        Movimentacao mov = MovimentacaoFactory.criar(sabor, quantidade, cliente, precoVendaPadrao);
+        Movimentacao mov = MovimentacaoFactory.criar(sabor, quantidade, cliente, null);
         Command comando = new PedidoCommand(movimentacaoDao, clienteDao, mov);
         comando.execute();
         return mov;
