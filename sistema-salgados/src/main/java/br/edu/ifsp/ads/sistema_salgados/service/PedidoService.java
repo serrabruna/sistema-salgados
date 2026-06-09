@@ -11,6 +11,7 @@ import br.edu.ifsp.ads.sistema_salgados.repository.MovimentacaoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+//Padrão Facade para simplificar a interface de processamento de pedidos
 @Service
 public class PedidoService {
     @Autowired
