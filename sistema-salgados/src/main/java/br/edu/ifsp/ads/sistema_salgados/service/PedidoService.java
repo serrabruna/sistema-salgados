@@ -5,6 +5,7 @@ import br.edu.ifsp.ads.sistema_salgados.model.Movimentacao;
 import br.edu.ifsp.ads.sistema_salgados.patterns.command.Command;
 import br.edu.ifsp.ads.sistema_salgados.patterns.command.PedidoCommand;
 import br.edu.ifsp.ads.sistema_salgados.patterns.factory.MovimentacaoFactory;
+import br.edu.ifsp.ads.sistema_salgados.patterns.template.CalculadoraPedidoProprio;
 import br.edu.ifsp.ads.sistema_salgados.repository.ClienteDao;
 import br.edu.ifsp.ads.sistema_salgados.repository.MovimentacaoDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,14 @@ public class PedidoService {
     private MovimentacaoDao movimentacaoDao;
 
     @Autowired
-    private ClienteDao clienteDao; 
+    private ClienteDao clienteDao;
+
+    @Autowired
+    private CalculadoraPedidoProprio calculadoraPedidoProprio; 
+
     public Movimentacao processarPedido(String sabor, Integer quantidade, Cliente cliente) {
-        Movimentacao mov = MovimentacaoFactory.criar(sabor, quantidade, cliente, null);
+        
+        Movimentacao mov = MovimentacaoFactory.criar(sabor, quantidade, cliente, calculadoraPedidoProprio);
         Command comando = new PedidoCommand(movimentacaoDao, clienteDao, mov);
         comando.execute();
         return mov;
