@@ -18,17 +18,22 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService; 
-
-    @PostMapping("/cadastrar")
-    public ResponseEntity<Cliente> cadastrar(@RequestBody Cliente cliente) {
-        Cliente salvo = clienteService.registrarNovoCliente(cliente);
-        return ResponseEntity.ok(salvo);
+@PostMapping("/cadastrar")
+    public ResponseEntity<?> cadastrar(@RequestBody Cliente cliente) {
+        try {
+            Cliente salvo = clienteService.registrarNovoCliente(cliente);
+            return ResponseEntity.ok(salvo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credenciais) {
         try {
-            Cliente cliente = clienteService.autenticarCliente(credenciais.get("email"), credenciais.get("senha"));
+            String email = credenciais.get("email");
+            String senha = credenciais.get("senha");
+            Cliente cliente = clienteService.autenticarCliente(email, senha);
             return ResponseEntity.ok(cliente);
         } catch (RuntimeException e) {
             return ResponseEntity.status(401).body(e.getMessage());
