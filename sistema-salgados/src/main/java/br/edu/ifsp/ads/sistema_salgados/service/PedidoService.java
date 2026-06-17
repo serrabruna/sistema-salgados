@@ -37,4 +37,8 @@ public class PedidoService {
         Command comando = new PedidoCommand(movimentacaoDao, clienteDao, mov);
         comando.undo();
     }
+
+    public Movimentacao criarPreviaDoPedido(String sabor, Integer quantidade, Cliente cliente) {
+        return MovimentacaoFactory.criar(sabor, quantidade, cliente, calculadoraPedidoProprio);
+    }
 }
