@@ -13,6 +13,12 @@ import br.edu.ifsp.ads.sistema_salgados.repository.MovimentacaoDao;
 import br.edu.ifsp.ads.sistema_salgados.repository.ClienteDao;
 import br.edu.ifsp.ads.sistema_salgados.service.PedidoService;
 
+class PedidoDTO {
+    public String sabor;
+    public Integer quantidade;
+    public Long clienteId;
+}
+
 @RestController
 @RequestMapping("/api/pedidos")
 @CrossOrigin(origins = "*")
@@ -28,16 +34,14 @@ public class PedidoController {
     private PedidoService pedidoService; 
 
     @PostMapping("/vender")
-    public ResponseEntity<?> vender(@RequestBody Map<String, Object> dados) {
-        String sabor = (String) dados.get("sabor");
-        Integer qtd = (Integer) dados.get("quantidade");
-        Long clienteId = ((Number) dados.get("clienteId")).longValue();
-
-        Cliente cliente = clienteDao.findById(clienteId).orElse(null);
+    public ResponseEntity<?> vender(@RequestBody PedidoDTO pedido) {
+        if (pedido.clienteId == null) return ResponseEntity.badRequest().body("ID do cliente ausente.");
+        
+        Cliente cliente = clienteDao.findById(pedido.clienteId).orElse(null);
         if (cliente == null) return ResponseEntity.badRequest().body("Cliente não encontrado.");
 
         try {
-            Movimentacao mov = pedidoService.processarPedido(sabor, qtd, cliente);
+            Movimentacao mov = pedidoService.processarPedido(pedido.sabor, pedido.quantidade, cliente);
             return ResponseEntity.ok(mov);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
