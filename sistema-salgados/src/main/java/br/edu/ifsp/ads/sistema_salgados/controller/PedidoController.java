@@ -35,14 +35,18 @@ public class PedidoController {
 
     @PostMapping("/vender")
     public ResponseEntity<?> vender(@RequestBody PedidoDTO pedido) {
-        if (pedido.clienteId == null) return ResponseEntity.badRequest().body("ID do cliente ausente.");
-        
+        if (pedido.clienteId == null) {
+            return ResponseEntity.badRequest().body("ID do cliente ausente.");
+        }
         Cliente cliente = clienteDao.findById(pedido.clienteId).orElse(null);
-        if (cliente == null) return ResponseEntity.badRequest().body("Cliente não encontrado.");
-
+        if (cliente == null) {
+            return ResponseEntity.badRequest().body("Cliente não encontrado.");
+        }
         try {
-            Movimentacao mov = pedidoService.processarPedido(pedido.sabor, pedido.quantidade, cliente);
-            return ResponseEntity.ok(mov);
+            pedidoService.processarPedido(pedido.sabor, pedido.quantidade, cliente);
+            Cliente clienteAtualizado = clienteDao.findById(pedido.clienteId).orElse(cliente);
+            return ResponseEntity.ok(clienteAtualizado);
+            
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
