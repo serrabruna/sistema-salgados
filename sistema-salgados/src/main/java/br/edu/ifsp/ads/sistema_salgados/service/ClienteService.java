@@ -2,7 +2,7 @@ package br.edu.ifsp.ads.sistema_salgados.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
 import br.edu.ifsp.ads.sistema_salgados.model.Cliente;
 import br.edu.ifsp.ads.sistema_salgados.repository.ClienteDao;
 
@@ -24,8 +24,9 @@ public class ClienteService {
             throw new RuntimeException("A senha é obrigatória!");
         }
 
-        Cliente clienteExistente = clienteDao.findByEmailAndSenha(cliente.getEmail(), cliente.getSenha());
-        if (clienteExistente != null) {
+        List<Cliente> clientesExistentes = clienteDao.findByEmail(cliente.getEmail());
+    
+        if (!clientesExistentes.isEmpty()) {
             throw new RuntimeException("Este e-mail já está cadastrado no sistema!");
         }
         
